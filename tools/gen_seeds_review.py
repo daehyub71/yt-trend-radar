@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """config/seeds.yaml → docs/seeds_review.html 검토 페이지 생성기.
 
 목적: 시드 90개를 눈으로 빠르게 검수한다 — 카테고리 오분류, 비한국어 채널, 규모 편중을
@@ -21,6 +21,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "collector"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _theme import TOKENS  # noqa: E402  — 색 토큰의 단일 정의점
 
 OUT = ROOT / "docs" / "seeds_review.html"
 VERDICTS = ROOT / "docs" / "seeds_verdicts.json"
@@ -54,49 +57,6 @@ def fmt_subs(n: int | None) -> str:
 
 
 CSS = """
-:root {
-  color-scheme: light;
-  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f2ee;
-  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
-  --grid:#e1e0d9; --rule:#c3c2b7; --border:rgba(11,11,11,0.10);
-  --accent:#2a78d6; --warn:#fab219; --warn-ink:#8a5a00;
-  --good:#0ca30c; --good-ink:#006300; --bad:#d03b3b; --bad-ink:#d03b3b;
-  --t-micro:#86b6ef; --t-small:#5598e7; --t-mid:#2a78d6; --t-large:#184f95;
-  --t-micro-ink:#184f95; --t-small-ink:#184f95; --t-mid-ink:#1c5cab; --t-large-ink:#104281;
-}
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232322;
-    --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
-    --grid:#2c2c2a; --rule:#383835; --border:rgba(255,255,255,0.10);
-    --accent:#3987e5; --warn:#fab219; --warn-ink:#fab219;
-    --good:#0ca30c; --good-ink:#0ca30c; --bad:#d03b3b; --bad-ink:#e66767;
-    --t-micro:#184f95; --t-small:#256abf; --t-mid:#3987e5; --t-large:#86b6ef;
-    --t-micro-ink:#86b6ef; --t-small-ink:#9ec5f4; --t-mid-ink:#b7d3f6; --t-large-ink:#cde2fb;
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232322;
-  --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
-  --grid:#2c2c2a; --rule:#383835; --border:rgba(255,255,255,0.10);
-  --accent:#3987e5; --warn:#fab219; --warn-ink:#fab219;
-  --good:#0ca30c; --good-ink:#0ca30c; --bad:#d03b3b; --bad-ink:#e66767;
-  --t-micro:#184f95; --t-small:#256abf; --t-mid:#3987e5; --t-large:#86b6ef;
-  --t-micro-ink:#86b6ef; --t-small-ink:#9ec5f4; --t-mid-ink:#b7d3f6; --t-large-ink:#cde2fb;
-}
-:root[data-theme="light"] {
-  color-scheme: light;
-  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f2ee;
-  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
-  --grid:#e1e0d9; --rule:#c3c2b7; --border:rgba(11,11,11,0.10);
-  --accent:#2a78d6; --warn:#fab219; --warn-ink:#8a5a00;
-  --good:#0ca30c; --good-ink:#006300; --bad:#d03b3b; --bad-ink:#d03b3b;
-  --t-micro:#86b6ef; --t-small:#5598e7; --t-mid:#2a78d6; --t-large:#184f95;
-  --t-micro-ink:#184f95; --t-small-ink:#184f95; --t-mid-ink:#1c5cab; --t-large-ink:#104281;
-}
-
 body { background:var(--page); color:var(--ink); margin:0; line-height:1.5;
   font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
 .wrap { max-width:1040px; margin:0 auto; padding:36px 20px 64px; }
@@ -401,7 +361,7 @@ def build() -> str:
     )
 
     return f"""<title>yt-trend-radar 시드 채널 검토</title>
-<style>{CSS}</style>
+<style>{TOKENS}{CSS}</style>
 <div class="wrap">
 <header>
   <div class="eyebrow">시드 채널 검토</div>

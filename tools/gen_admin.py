@@ -41,6 +41,10 @@ MIN_PASS_RATE = 0.6            # 카테고리 검증 통과율 하한
 COLLECT_STALE_HOURS = 12       # PLAN: 12시간 무수집 시 알림
 QUOTA_WARN_RATIO = 0.8         # 일 상한의 80% 넘으면 경고
 
+# 콜드스타트 — 속도 지수는 스냅샷 2개 이상이 있어야 나오고, 의미 있는 순위는 축적이 필요하다.
+COLDSTART_BEGAN = "2026-08-03"  # 첫 실수집일
+COLDSTART_DAYS = 14
+
 CSS = """
 .checks { display:grid; gap:8px; }
 .check { display:flex; gap:10px; align-items:flex-start; background:var(--surface);
@@ -163,6 +167,28 @@ def db_stats(settings) -> dict | None:
             timeout=20,
         )
         out["quota_today"] = r.json() if r.ok else []
+
+        # 최근 수집 회차 — 콜드스타트 동안 가장 자주 보게 되는 정보다.
+        # 스냅샷 ts 를 분 단위로 묶으면 그게 곧 한 회차다.
+        r = requests.get(
+            f"{settings.supabase_url}/rest/v1/{TABLES['video_snapshots']}"
+            "?select=ts&order=ts.desc&limit=4000",
+            headers={k: v for k, v in h.items() if k not in ("Prefer", "Range")},
+            timeout=25,
+        )
+        from collections import Counter
+
+        rounds = Counter(x["ts"][:16] for x in (r.json() if r.ok else []))
+        out["rounds"] = sorted(rounds.items(), reverse=True)[:8]
+
+        # 보드 충전 상태 (카테고리 × 종류)
+        r = requests.get(
+            f"{settings.supabase_url}/rest/v1/{TABLES['trend_scores']}"
+            "?select=category_id,scope,kind,format",
+            headers={k: v for k, v in h.items() if k not in ("Prefer", "Range")},
+            timeout=25,
+        )
+        out["boards"] = r.json() if r.ok else []
         return out
     except Exception as e:  # noqa: BLE001
         out["error"] = f"{type(e).__name__}"
@@ -186,7 +212,13 @@ def parse_tier(note: str) -> str | None:
 # ------------------------------------------------------------------ 렌더
 
 
+# 점검 결과를 알림 경로로 흘려보내기 위한 수집기.
+# 콘솔이 bad 를 띄워도 아무도 페이지를 안 열면 모른다 — 그래서 --strict 로 종료 코드를 준다.
+FINDINGS: list[tuple[str, str]] = []
+
+
 def check(state: str, what: str, detail: str = "", fix: str = "") -> str:
+    FINDINGS.append((state, what))
     icon = {"ok": "✅", "warn": "⚠️", "bad": "❌", "na": "—"}[state]
     fix_html = f'<div class="fix"><code>{html.escape(fix)}</code></div>' if fix else ""
     detail_html = f'<div class="detail">{detail}</div>' if detail else ""
@@ -373,13 +405,73 @@ def build(offline: bool) -> str:
 
     counts = (stats or {}).get("counts", {})
     snap_total = (counts.get("video_snapshots") or 0) + (counts.get("channel_snapshots") or 0)
+
+    # 콜드스타트 경과
+    began = datetime.fromisoformat(COLDSTART_BEGAN).replace(tzinfo=timezone.utc)
+    elapsed_days = max(0, (now - began).days)
+    cs_pct = min(100, round(elapsed_days / COLDSTART_DAYS * 100))
+    target = (began + timedelta(days=COLDSTART_DAYS)).date().isoformat()
+
     tiles = [
         tile("카테고리", len(tax.categories)),
         tile("시드 채널", total_seeds),
         tile("검증 통과", total_pass, f"/ {total_judged}" if total_judged else "· 미검증"),
         tile("스냅샷 행", f"{snap_total:,}" if stats and not stats.get("error") else "—"),
         tile("랭킹 행", f"{counts.get('trend_scores', 0):,}" if counts else "—"),
+        tile("콜드스타트", f"{elapsed_days}", f"/ {COLDSTART_DAYS}일 · {cs_pct}%"),
     ]
+
+    # 최근 수집 회차
+    rounds = (stats or {}).get("rounds") or []
+    if rounds:
+        rows_r = "".join(
+            f'<tr><td>{html.escape(ts.replace("T", " "))} UTC</td>'
+            f'<td class="num">{n:,}</td></tr>'
+            for ts, n in rounds
+        )
+        rounds_html = (
+            '<div class="tablewrap"><table><thead><tr><th>수집 시각</th>'
+            '<th style="text-align:right">영상 스냅샷</th></tr></thead>'
+            f"<tbody>{rows_r}</tbody></table></div>"
+        )
+    else:
+        rounds_html = '<p class="note">아직 수집 이력이 없습니다.</p>'
+
+    # 보드 충전 상태
+    board_rows = (stats or {}).get("boards") or []
+    if board_rows:
+        from collections import Counter
+
+        cnt = Counter(
+            (b["category_id"], b["scope"], b["kind"], b.get("format")) for b in board_rows
+        )
+        cols = [
+            ("video", "trending", "long"), ("video", "trending", "short"),
+            ("video", "rising", "long"), ("video", "rising", "short"),
+            ("channel", "trending", None), ("channel", "rising", None),
+        ]
+        head = (
+            "<tr><th>카테고리</th>"
+            "<th>지금 뜨는<br>롱폼</th><th>지금 뜨는<br>Shorts</th>"
+            "<th>새로 뜨는<br>롱폼</th><th>새로 뜨는<br>Shorts</th>"
+            "<th>지금 뜨는<br>유튜버</th><th>새로 뜨는<br>유튜버</th></tr>"
+        )
+        body_rows = []
+        for c in tax.categories:
+            cells = []
+            for scope, kind, fmt in cols:
+                n = cnt.get((c.id, scope, kind, fmt), 0)
+                style = "" if n else ' style="color:var(--muted)"'
+                cells.append(f'<td class="num"{style}>{n or "—"}</td>')
+            body_rows.append(
+                f"<tr><td><b>{html.escape(c.name)}</b></td>{''.join(cells)}</tr>"
+            )
+        boards_html = (
+            '<div class="tablewrap"><table><thead>' + head +
+            f"</thead><tbody>{''.join(body_rows)}</tbody></table></div>"
+        )
+    else:
+        boards_html = '<p class="note">아직 산출된 랭킹이 없습니다.</p>'
 
     # --- 런북 ------------------------------------------------------------
     runbook = [
@@ -442,6 +534,25 @@ def build(offline: bool) -> str:
 </section>
 
 <section>
+  <h2>콜드스타트 진행</h2>
+  <div class="barrow" style="margin-bottom:10px">
+    <div class="bar" role="img" aria-label="콜드스타트 {cs_pct}%"><i style="width:{cs_pct}%"></i></div>
+    <span class="num">{elapsed_days}/{COLDSTART_DAYS}일 · 공개 목표 {target}</span>
+  </div>
+  <p class="note" style="margin-bottom:12px">
+    속도 지수는 같은 대상의 스냅샷이 2개 이상 있어야 계산됩니다. 축적 초기에 보드가 얇은 것은
+    정상이며, 그동안 검색 색인은 차단해 둡니다(<code>SITE_PUBLIC</code> 미설정).
+  </p>
+  <h2>최근 수집 회차</h2>
+  {rounds_html}
+</section>
+
+<section>
+  <h2>보드 충전 상태</h2>
+  {boards_html}
+</section>
+
+<section>
   <h2>카테고리 현황</h2>
   <div class="tablewrap"><table>
     <thead><tr><th>카테고리</th><th style="text-align:right">시드</th>
@@ -481,13 +592,32 @@ def build(offline: bool) -> str:
     return page("yt-trend-radar 운영 콘솔", CSS, body, JS)
 
 
-def main():
+def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", action="store_true", help="DB 조회 건너뜀")
+    ap.add_argument(
+        "--strict",
+        action="store_true",
+        help="심각(bad) 점검이 하나라도 있으면 비정상 종료한다. "
+        "CI 에서 쓰면 워크플로 실패 → 알림으로 이어진다",
+    )
     args = ap.parse_args()
     OUT.write_text(build(args.offline), encoding="utf-8")
     print(f"OK: {OUT}")
 
+    bad = [w for s, w in FINDINGS if s == "bad"]
+    warn = [w for s, w in FINDINGS if s == "warn"]
+    print(f"점검: 심각 {len(bad)} · 주의 {len(warn)} · 정상 {sum(1 for s, _ in FINDINGS if s == 'ok')}")
+    for w in bad:
+        print(f"  ❌ {w}")
+    for w in warn:
+        print(f"  ⚠️ {w}")
+
+    if args.strict and bad:
+        print("\n--strict: 심각 점검이 있어 비정상 종료합니다")
+        return 1
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

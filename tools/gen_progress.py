@@ -1,15 +1,22 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """docs/TASK.md → docs/progress.html 진행 대시보드 생성기.
 
 SDD 규칙 4 (워크스페이스 CLAUDE.md): Phase 완료마다 실행하고 아티팩트로 게시한다.
-색상은 dataviz 스킬의 검증 기본 팔레트를 그대로 사용한다 (서비스 UI 아님 — DESIGN.md 범위 밖).
+
+색 토큰은 `_theme.TOKENS` 에서 가져온다 — 세 생성기가 각자 선언하면 반드시 어긋난다.
+레이아웃 CSS 는 페이지마다 형태가 달라 각자 갖는다(여긴 920px, 콘솔·검토는 1040px).
+값의 근거와 검증 기록은 `docs/DESIGN.md` 소관.
 
 사용법:  python tools/gen_progress.py   (프로젝트 루트 또는 아무 데서나)
 """
 import html
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _theme import TOKENS  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 TASK_MD = ROOT / "docs" / "TASK.md"
@@ -68,36 +75,6 @@ def phase_status(p):
 
 
 CSS = """
-:root {
-  color-scheme: light;
-  --page: #f9f9f7; --surface: #fcfcfb;
-  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
-  --grid: #e1e0d9; --border: rgba(11,11,11,0.10);
-  --accent: #2a78d6; --good: #0ca30c; --good-text: #006300;
-}
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-    --page: #0d0d0d; --surface: #1a1a19;
-    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
-    --grid: #2c2c2a; --border: rgba(255,255,255,0.10);
-    --accent: #3987e5; --good: #0ca30c; --good-text: #0ca30c;
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --page: #0d0d0d; --surface: #1a1a19;
-  --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
-  --grid: #2c2c2a; --border: rgba(255,255,255,0.10);
-  --accent: #3987e5; --good: #0ca30c; --good-text: #0ca30c;
-}
-:root[data-theme="light"] {
-  color-scheme: light;
-  --page: #f9f9f7; --surface: #fcfcfb;
-  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
-  --grid: #e1e0d9; --border: rgba(11,11,11,0.10);
-  --accent: #2a78d6; --good: #0ca30c; --good-text: #006300;
-}
 body {
   background: var(--page); color: var(--ink);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -212,7 +189,7 @@ def render(phases) -> str:
 
     cur_label = f'{current["id"]}. {html.escape(current["title"])}' if current else "전체 완료 🎉"
     return f"""<title>yt-trend-radar 진행 현황</title>
-<style>{CSS}</style>
+<style>{TOKENS}{CSS}</style>
 <div class="wrap">
 <header>
   <div class="eyebrow">SDD 진행 대시보드</div>

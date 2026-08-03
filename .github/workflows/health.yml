@@ -35,3 +35,9 @@ jobs:
 
       - name: 수집 신선도 (12시간 기준)
         run: python tools/check_freshness.py --max-age-hours 12
+
+      # 운영 콘솔의 점검 로직을 그대로 알림 경로로 쓴다.
+      # 콘솔이 '심각'을 띄워도 누군가 페이지를 열어야만 안다면 감시가 아니다.
+      # 여기서 실패하면 GitHub 이 저장소 소유자에게 메일을 보낸다.
+      - name: 운영 점검 (심각 항목이 있으면 실패)
+        run: python tools/gen_admin.py --strict
