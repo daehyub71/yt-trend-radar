@@ -51,8 +51,23 @@ export default function Privacy() {
         <div>
           <h2 style={{ fontSize: 16 }}>제3자 제공</h2>
           <p style={{ color: 'var(--ink-2)' }}>
-            수집한 정보를 제3자에게 판매하거나 제공하지 않습니다. 영상 재생은 유튜브에서
-            이루어지며, 이때 유튜브의 개인정보처리방침이 적용됩니다.
+            수집한 정보를 제3자에게 판매하거나 제공하지 않습니다. 다만 페이지를 표시하는 과정에서
+            아래 외부 서버로 요청이 발생하며, 이때 접속 IP 등 통신에 필요한 정보가 해당 서버에
+            전달됩니다.
+          </p>
+          <ul style={{ color: 'var(--ink-2)', marginTop: 8, paddingLeft: 20 }}>
+            <li>
+              <b>YouTube</b> — 영상·채널 썸네일 이미지, 영상 재생 링크
+            </li>
+            <li>
+              <b>jsDelivr</b> — 한글 본문 서체(Pretendard) 배포
+            </li>
+            <li>
+              <b>Vercel</b> — 이 사이트의 호스팅
+            </li>
+          </ul>
+          <p style={{ color: 'var(--ink-2)', marginTop: 8 }}>
+            이들 요청에는 이 서비스가 만든 식별자나 추적 정보가 포함되지 않습니다.
           </p>
         </div>
 
