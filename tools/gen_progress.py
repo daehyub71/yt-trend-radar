@@ -113,7 +113,7 @@ section h2 { font-size: 15px; margin: 26px 0 10px; color: var(--ink); }
   font-size: 11.5px; font-weight: 650; border-radius: 999px; padding: 2px 10px;
   border: 1px solid var(--border); white-space: nowrap;
 }
-.chip.done   { color: var(--good-text); border-color: color-mix(in oklab, var(--good) 45%, transparent); }
+.chip.done   { color: var(--good-ink); border-color: color-mix(in oklab, var(--good) 45%, transparent); }
 .chip.active { color: var(--accent);   border-color: color-mix(in oklab, var(--accent) 45%, transparent); }
 .chip.pending{ color: var(--muted); }
 .pdate { font-size: 12px; color: var(--muted); white-space: nowrap; }
@@ -127,11 +127,11 @@ ul.tasks li::before {
   content: "○"; color: var(--muted);
 }
 ul.tasks li.done { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--grid); }
-ul.tasks li.done::before { content: "✓"; color: var(--good-text); font-weight: 700; }
+ul.tasks li.done::before { content: "✓"; color: var(--good-ink); font-weight: 700; }
 .mstones { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
 .ms { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
 .ms .mtag { font-size: 12px; font-weight: 700; color: var(--accent); }
-.ms .mtag.msdone { color: var(--good-text); }
+.ms .mtag.msdone { color: var(--good-ink); }
 .ms .mtitle { font-size: 13px; margin-top: 2px; }
 .ms .mphases { font-size: 11.5px; color: var(--muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
 footer { margin-top: 30px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--grid); padding-top: 12px; }
