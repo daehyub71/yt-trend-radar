@@ -83,14 +83,21 @@ def main() -> int:
     )
 
     print(f"\n=== 보드 ({len(scores)}행) ===")
+    print(f"  {'카테고리':9s} " + " · ".join(
+        f"{BOARD_LABEL[(scope, kind)]}" + ("(롱/숏)" if scope == "video" else "")
+        for scope, kind, _ in BOARDS
+    ))
     for cat in categories:
         parts = []
         for scope, kind, _cfg in BOARDS:
-            n = sum(
-                1 for s in scores
-                if s.category_id == cat and s.scope == scope and s.kind == kind
-            )
-            parts.append(f"{BOARD_LABEL[(scope, kind)]} {n:>3d}")
+            rows = [s for s in scores
+                    if s.category_id == cat and s.scope == scope and s.kind == kind]
+            if scope == "video":
+                n_long = sum(1 for s in rows if s.format == "long")
+                n_short = sum(1 for s in rows if s.format == "short")
+                parts.append(f"{n_long:>3d}/{n_short:<3d}")
+            else:
+                parts.append(f"{len(rows):>3d}   ")
         print(f"  {cat:9s} " + " · ".join(parts))
 
     if args.top:

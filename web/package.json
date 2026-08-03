@@ -1,0 +1,30 @@
+{
+  "name": "yt-trend-radar-web",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^15.5.22",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "5.9.3"
+  },
+  "overridesReason": "배포 전 보안 검토(2026-08-03)에서 next 트리의 취약 의존성 2건을 상향했다. sharp: next 의 optionalDependency 가 0.34.5(libvips CVE, GHSA-f88m-g3jw-g9cj)로 들어온다 — 현재 images.unoptimized 라 실행 경로에 없지만 나중에 최적화를 켜더라도 안전하도록 치워둔다. postcss: next 가 8.5.17 이하(GHSA-qx2v-qp2m-jg93 외 2건)를 물고 오는데, 권고 범위가 Next 16 대까지 걸쳐 있어 Next 버전 상향으로는 풀리지 않는다.",
+  "overrides": {
+    "sharp": "0.35.3",
+    "postcss": "8.5.25"
+  }
+}

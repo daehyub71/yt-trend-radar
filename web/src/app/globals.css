@@ -1,0 +1,492 @@
+/* 디자인 토큰 — 값의 근거와 검증 기록은 docs/DESIGN.md 가 소유한다.
+   §1 기반 토큰 · §6.4 보드 구분 2색 (validate_palette.js 라이트/다크 ALL PASS, 2026-08-03) */
+
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --surface-2: #f3f2ee;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --rule: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+  --accent: #2a78d6;
+  --trending: #2a78d6;
+  --rising: #eb6834;
+  --good-ink: #006300;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme='light'])) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --surface-2: #232322;
+    --ink: #ffffff;
+    --ink-2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --rule: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+    --accent: #3987e5;
+    --trending: #3987e5;
+    --rising: #d95926;
+    --good-ink: #0ca30c;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-2: #232322;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --muted: #898781;
+  --grid: #2c2c2a;
+  --rule: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+  --accent: #3987e5;
+  --trending: #3987e5;
+  --rising: #d95926;
+  --good-ink: #0ca30c;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  line-height: 1.5;
+  font-family:
+    Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI',
+    'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px 72px;
+}
+
+/* --- 헤더 ---------------------------------------------------------------- */
+.site-head {
+  padding: 28px 0 4px;
+}
+.site-head h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.site-head p {
+  margin: 4px 0 0;
+  color: var(--ink-2);
+  font-size: 13.5px;
+}
+
+/* --- 카테고리 칩 (탭이 아니다 — 개수가 늘어나는 전제, DESIGN §6.1) -------- */
+.chipbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 12px 0;
+  margin-top: 12px;
+  background: color-mix(in srgb, var(--page) 92%, transparent);
+  backdrop-filter: blur(8px);
+  scrollbar-width: thin;
+}
+.chip {
+  flex: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.chip[aria-current='page'] {
+  background: var(--ink);
+  color: var(--page);
+  border-color: transparent;
+}
+
+/* --- 형식 토글 ----------------------------------------------------------- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 6px 0 22px;
+}
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.seg a {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.seg a[aria-current='page'] {
+  background: var(--accent);
+  color: #fff;
+}
+.toolbar .hint {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* --- 보드 ---------------------------------------------------------------- */
+.boards {
+  display: grid;
+  gap: 30px;
+}
+@media (min-width: 900px) {
+  .boards.two {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.board > header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.board h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.board h2 .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+.board .sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: auto;
+  white-space: nowrap;
+}
+.board[data-kind='trending'] .dot {
+  background: var(--trending);
+}
+.board[data-kind='rising'] .dot {
+  background: var(--rising);
+}
+
+/* --- 카드 (롱폼 16:9) ---------------------------------------------------- */
+.cards {
+  display: grid;
+  gap: 14px;
+}
+.card {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+}
+.card:hover {
+  background: var(--surface);
+  border-color: var(--border);
+}
+.thumb {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface-2);
+  aspect-ratio: 16 / 9;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rank {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.66);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  display: grid;
+  place-items: center;
+}
+.rank[data-top='1'] {
+  font-size: 14px;
+  min-width: 26px;
+  height: 26px;
+}
+.card .title {
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card .title:hover {
+  text-decoration: underline;
+}
+.card .body {
+  min-width: 0; /* grid 자식이 제목 길이로 밀려나지 않게 */
+}
+.card .meta {
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.card .meta .ch:hover {
+  text-decoration: underline;
+}
+
+/* --- 강도 막대: 보드 1위 대비 상대값 (DESIGN §6.3) ----------------------- */
+.gain {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.gainbar {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--grid);
+  overflow: hidden;
+  max-width: 120px;
+}
+.gainbar > i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+}
+.board[data-kind='trending'] .gainbar > i {
+  background: var(--trending);
+}
+.board[data-kind='rising'] .gainbar > i {
+  background: var(--rising);
+}
+.gain .num {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* --- Shorts 격자 (9:16) -------------------------------------------------- */
+.cards.shorts {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (min-width: 900px) {
+  .cards.shorts {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+.cards.shorts .card {
+  grid-template-columns: 1fr;
+  padding: 0;
+  gap: 8px;
+}
+.cards.shorts .thumb {
+  aspect-ratio: 9 / 16;
+}
+.cards.shorts .title {
+  font-size: 13px;
+  -webkit-line-clamp: 2;
+  padding: 0 2px;
+}
+.cards.shorts .meta,
+.cards.shorts .gain {
+  padding: 0 2px;
+}
+.cards.shorts .gainbar {
+  max-width: none;
+}
+
+/* --- 채널 카드 ----------------------------------------------------------- */
+.chcard {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+}
+.chcard:hover {
+  background: var(--surface);
+  border-color: var(--border);
+}
+.chcard img {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--surface-2);
+}
+.chcard .title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* --- 빈 상태 ------------------------------------------------------------- */
+.empty {
+  padding: 20px;
+  border: 1px dashed var(--rule);
+  border-radius: 12px;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  background: var(--surface);
+}
+.empty b {
+  color: var(--ink);
+}
+
+/* --- 채널 상세 ----------------------------------------------------------- */
+.detail-head {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 26px 0 18px;
+}
+.detail-head img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  object-fit: cover;
+}
+.detail-head h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+.detail-head .meta {
+  margin-top: 4px;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+.charts {
+  display: grid;
+  gap: 18px;
+  margin: 8px 0 30px;
+}
+@media (min-width: 760px) {
+  .charts {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.chart {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.chart h3 {
+  margin: 0 0 2px;
+  font-size: 13.5px;
+  font-weight: 650;
+}
+.chart .now {
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.chart .delta {
+  font-size: 12.5px;
+  color: var(--ink-2);
+  margin-left: 6px;
+  font-weight: 500;
+}
+.chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 8px;
+}
+
+/* --- 푸터 ---------------------------------------------------------------- */
+.site-foot {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--grid);
+  font-size: 12px;
+  color: var(--muted);
+  display: grid;
+  gap: 6px;
+}
+.site-foot a {
+  text-decoration: underline;
+}
+.notice {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 10px 0 0;
+}
+.backlink {
+  display: inline-block;
+  margin: 20px 0 0;
+  font-size: 13px;
+  color: var(--accent);
+}

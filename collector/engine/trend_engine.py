@@ -84,6 +84,9 @@ VIDEO_WINDOW_HOURS = 48
 VIDEO_MAX_AGE_HOURS = 24 * 7
 CHANNEL_WINDOW_HOURS = 24 * 7
 
+# 영상 보드는 형식별로 나눈다. 채널 보드에는 이 축이 없다.
+VIDEO_FORMATS = ("long", "short")
+
 
 def configs_from(params: TrendParams) -> list[tuple[str, str, ScoreConfig]]:
     """설정에서 4개 보드 규격을 만든다.
@@ -178,7 +181,13 @@ def rank_videos(
     category_id: str,
     region: str | None = None,
     limit: int = DEFAULT_LIMIT,
+    video_format: str | None = None,
 ) -> list[TrendScore]:
+    """video_format: 'long' | 'short' | None(혼재).
+
+    실측(2026-08-03): 추적 영상의 63%가 Shorts 였고 보드의 67%를 차지했다.
+    Shorts 는 조회수 획득 속도 자체가 달라, 섞으면 롱폼이 노출되지 않는다.
+    """
     kind = config.kind
     scored: list[tuple[float, TrendScore]] = []
 
@@ -186,6 +195,8 @@ def rank_videos(
         if v.category_id != category_id:
             continue
         if region is not None and v.region != region:
+            continue
+        if video_format is not None and v.is_short != (video_format == "short"):
             continue
         if config.max_age_hours is not None:
             age_h = (now - v.published_at).total_seconds() / 3600
@@ -212,7 +223,7 @@ def rank_videos(
                 score,
                 TrendScore(
                     scope="video", kind=kind, category_id=category_id, region=region,
-                    rank=0, score=score, target_id=v.id,
+                    format=video_format, rank=0, score=score, target_id=v.id,
                     title=v.title,
                     channel_id=v.channel_id,
                     channel_title=ch.title if ch else None,
@@ -306,10 +317,12 @@ def build_boards(
         for region in regions or [None]:
             for scope, _kind, config in boards:
                 if scope == "video":
-                    out.extend(
-                        rank_videos(videos, video_snapshots, channels_by_id, config,
-                                    now, category_id, region, limit)
-                    )
+                    # 롱폼/Shorts 를 별도 보드로 산출한다 (섞으면 롱폼이 묻힌다)
+                    for fmt in VIDEO_FORMATS:
+                        out.extend(
+                            rank_videos(videos, video_snapshots, channels_by_id, config,
+                                        now, category_id, region, limit, video_format=fmt)
+                        )
                 else:
                     out.extend(
                         rank_channels(channels, channel_snapshots, config,

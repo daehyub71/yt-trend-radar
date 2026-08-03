@@ -132,6 +132,7 @@ class TrendScore:
     score: float
     target_id: str
     region: str | None = None
+    format: str | None = None  # 영상 보드: 'long' | 'short' · 채널 보드: None
     title: str | None = None
     channel_id: str | None = None
     channel_title: str | None = None
@@ -148,6 +149,7 @@ class TrendScore:
             "kind": self.kind,
             "category_id": self.category_id,
             "region": self.region or "",
+            "format": self.format or "",
             "rank": self.rank,
             "score": self.score,
             "target_id": self.target_id,

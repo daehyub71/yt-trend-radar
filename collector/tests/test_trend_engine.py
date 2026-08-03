@@ -415,6 +415,81 @@ def test_build_boards_ranks_restart_per_board(video_fixture, channel_fixture):
         assert ranks == list(range(1, len(ranks) + 1))
 
 
+# --------------------------------------------------- 롱폼/Shorts 분리 (2026-08-03)
+# 실측: 추적 영상 486개 중 306개(63%)가 Shorts, 산출 보드의 67%를 Shorts 가 차지했다.
+# 섞어두면 롱폼이 사실상 노출되지 않는다.
+
+
+@pytest.fixture
+def mixed_format_fixture():
+    channels = {"UCa": Channel(id="UCa", title="채널", subscriber_count=50_000,
+                               category_id="food")}
+    videos = [
+        Video(id="vShort00000", channel_id="UCa", title="숏폼", published_at=ts(20),
+              category_id="food", is_short=True, duration_seconds=45),
+        Video(id="vLong000000", channel_id="UCa", title="롱폼", published_at=ts(20),
+              category_id="food", is_short=False, duration_seconds=900),
+    ]
+    snaps = {
+        # Shorts 가 조회수 증가량이 압도적 — 섞으면 롱폼이 항상 밀린다
+        "vShort00000": [vsnap("vShort00000", 10, 0), vsnap("vShort00000", 2, 500_000)],
+        "vLong000000": [vsnap("vLong000000", 10, 0), vsnap("vLong000000", 2, 20_000)],
+    }
+    return videos, snaps, channels
+
+
+def test_rank_videos_filters_by_format(mixed_format_fixture):
+    videos, snaps, channels = mixed_format_fixture
+    longs = rank_videos(videos, snaps, channels, TRENDING_VIDEO, NOW, "food",
+                        video_format="long")
+    shorts = rank_videos(videos, snaps, channels, TRENDING_VIDEO, NOW, "food",
+                         video_format="short")
+    assert [s.target_id for s in longs] == ["vLong000000"]
+    assert [s.target_id for s in shorts] == ["vShort00000"]
+
+
+def test_rank_videos_stamps_format_on_score(mixed_format_fixture):
+    videos, snaps, channels = mixed_format_fixture
+    row = rank_videos(videos, snaps, channels, TRENDING_VIDEO, NOW, "food",
+                      video_format="long")[0]
+    assert row.format == "long"
+    assert row.to_row()["format"] == "long"
+
+
+def test_rank_videos_mixed_would_bury_long_form(mixed_format_fixture):
+    """분리하지 않으면 롱폼이 밀린다 — 분리의 근거를 테스트로 남긴다."""
+    videos, snaps, channels = mixed_format_fixture
+    mixed = rank_videos(videos, snaps, channels, TRENDING_VIDEO, NOW, "food")
+    assert mixed[0].target_id == "vShort00000"
+
+
+def test_build_boards_separates_video_formats(mixed_format_fixture, channel_fixture):
+    videos, vsnaps, _ = mixed_format_fixture
+    channels, csnaps = channel_fixture
+    boards = build_boards(
+        categories=["food"], videos=videos, video_snapshots=vsnaps,
+        channels=channels, channel_snapshots=csnaps, now=NOW,
+    )
+    video_formats = {s.format for s in boards if s.scope == "video"}
+    assert video_formats == {"long", "short"}
+    assert all(s.format is None for s in boards if s.scope == "channel"), (
+        "채널 보드에는 형식 축이 없다"
+    )
+
+
+def test_build_boards_ranks_restart_per_format(mixed_format_fixture, channel_fixture):
+    videos, vsnaps, _ = mixed_format_fixture
+    channels, csnaps = channel_fixture
+    boards = build_boards(
+        categories=["food"], videos=videos, video_snapshots=vsnaps,
+        channels=channels, channel_snapshots=csnaps, now=NOW,
+    )
+    for key in {(s.scope, s.kind, s.category_id, s.format) for s in boards}:
+        ranks = [s.rank for s in boards
+                 if (s.scope, s.kind, s.category_id, s.format) == key]
+        assert ranks == list(range(1, len(ranks) + 1))
+
+
 def test_build_boards_empty_input_is_safe():
     assert build_boards(categories=["food"], videos=[], video_snapshots={},
                         channels=[], channel_snapshots={}, now=NOW) == []
