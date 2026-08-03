@@ -43,9 +43,9 @@ jobs:
       YT_DAILY_QUOTA_LIMIT: '9500'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
           cache: pip
@@ -63,7 +63,8 @@ jobs:
 
       # --- 핵심 경로: 실패하면 워크플로도 실패한다 ---------------------------
       - name: 수집
-        run: python -m jobs.collect
+        id: collect
+        run: python -m jobs.collect | tee "$RUNNER_TEMP/collect.log"
 
       - name: 지수 산출·게시
         # 콜드스타트 초기에는 스냅샷이 1개뿐이라 0행이 나오고 exit 1 이 된다.
@@ -91,7 +92,7 @@ jobs:
       # 정면으로 어긋난다. 아티팩트는 보관 기간이 지나면 자동 삭제된다.
       - name: 검토 산출물 업로드 (아티팩트, 자동 만료)
         continue-on-error: true
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: seed-review
           path: |
@@ -115,7 +116,16 @@ jobs:
         if: always()
         working-directory: .
         run: |
-          echo "### 수집 회차 $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- 수집: ${{ steps.collect.outcome || 'see log' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- 상세는 운영 콘솔(docs/admin.html)에서 확인" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "### 수집 회차 $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo ""
+            echo "- 수집 결과: **${{ steps.collect.outcome }}**"
+            if [ -f "$RUNNER_TEMP/collect.log" ]; then
+              echo ""
+              echo '```'
+              grep -E '수집 결과|쿼터|보관 정책' "$RUNNER_TEMP/collect.log" || true
+              echo '```'
+            fi
+            echo ""
+            echo "- 시드 검토 리포트는 이 실행의 **seed-review** 아티팩트에서 내려받을 수 있습니다."
+          } >> "$GITHUB_STEP_SUMMARY"
