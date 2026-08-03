@@ -1,0 +1,206 @@
+<title>yt-trend-radar 운영 콘솔</title>
+<style>:root {
+  color-scheme: light;
+  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f2ee;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --rule:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --accent:#2a78d6;
+  --good:#0ca30c; --good-ink:#006300;
+  --bad:#d03b3b;  --bad-ink:#d03b3b;
+  --warn:#fab219; --warn-ink:#8a5a00;
+  --t-micro:#86b6ef; --t-small:#5598e7; --t-mid:#2a78d6; --t-large:#184f95;
+  --t-micro-ink:#184f95; --t-small-ink:#184f95; --t-mid-ink:#1c5cab; --t-large-ink:#104281;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+  color-scheme: dark;
+  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232322;
+  --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --rule:#383835; --border:rgba(255,255,255,0.10);
+  --accent:#3987e5;
+  --good:#0ca30c; --good-ink:#0ca30c;
+  --bad:#d03b3b;  --bad-ink:#e66767;
+  --warn:#fab219; --warn-ink:#fab219;
+  --t-micro:#184f95; --t-small:#256abf; --t-mid:#3987e5; --t-large:#86b6ef;
+  --t-micro-ink:#86b6ef; --t-small-ink:#9ec5f4; --t-mid-ink:#b7d3f6; --t-large-ink:#cde2fb;
+}
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232322;
+  --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --rule:#383835; --border:rgba(255,255,255,0.10);
+  --accent:#3987e5;
+  --good:#0ca30c; --good-ink:#0ca30c;
+  --bad:#d03b3b;  --bad-ink:#e66767;
+  --warn:#fab219; --warn-ink:#fab219;
+  --t-micro:#184f95; --t-small:#256abf; --t-mid:#3987e5; --t-large:#86b6ef;
+  --t-micro-ink:#86b6ef; --t-small-ink:#9ec5f4; --t-mid-ink:#b7d3f6; --t-large-ink:#cde2fb;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f2ee;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --rule:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --accent:#2a78d6;
+  --good:#0ca30c; --good-ink:#006300;
+  --bad:#d03b3b;  --bad-ink:#d03b3b;
+  --warn:#fab219; --warn-ink:#8a5a00;
+  --t-micro:#86b6ef; --t-small:#5598e7; --t-mid:#2a78d6; --t-large:#184f95;
+  --t-micro-ink:#184f95; --t-small-ink:#184f95; --t-mid-ink:#1c5cab; --t-large-ink:#104281;
+}
+
+body { background:var(--page); color:var(--ink); margin:0; line-height:1.5;
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+a { color:var(--accent); }
+.wrap { max-width:1040px; margin:0 auto; padding:36px 20px 64px; }
+
+header .eyebrow { font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; }
+header h1 { margin:4px 0 2px; font-size:25px; text-wrap:balance; }
+header .sub { margin:0; color:var(--ink-2); font-size:13.5px; }
+
+.tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:22px 0; }
+.tile { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:13px 15px; }
+.tile .label { font-size:12px; color:var(--muted); font-weight:600; }
+.tile .value { font-size:25px; font-weight:700; margin-top:2px; font-variant-numeric:tabular-nums; }
+.tile .value small { font-size:13px; font-weight:500; color:var(--ink-2); }
+
+.bar { background:var(--grid); border-radius:4px; height:8px; overflow:hidden; display:flex; gap:2px; }
+.bar > i, .bar > span { display:block; height:100%; }
+.bar > i { background:var(--accent); border-radius:4px; min-width:2px; }
+.bar > i.zero { min-width:0; }
+.barrow { display:flex; align-items:center; gap:10px; }
+.barrow .bar { flex:1; }
+.barrow .num { font-variant-numeric:tabular-nums; font-size:12.5px; color:var(--ink-2); white-space:nowrap; }
+
+section h2 { font-size:16px; margin:26px 0 10px; }
+.tablewrap { overflow-x:auto; border:1px solid var(--border); border-radius:10px; background:var(--surface); }
+table { border-collapse:collapse; width:100%; font-size:13.5px; }
+th { text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); font-weight:600; padding:9px 12px; border-bottom:1px solid var(--rule);
+  white-space:nowrap; }
+td { padding:9px 12px; border-bottom:1px solid var(--grid); vertical-align:middle; }
+tr:last-child td { border-bottom:none; }
+td.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible {
+  outline:2px solid var(--accent); outline-offset:2px; }
+.hidden { display:none !important; }
+footer { margin-top:32px; padding-top:12px; border-top:1px solid var(--grid);
+  font-size:11.5px; color:var(--muted); }
+footer code, code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+
+.checks { display:grid; gap:8px; }
+.check { display:flex; gap:10px; align-items:flex-start; background:var(--surface);
+  border:1px solid var(--border); border-radius:10px; padding:11px 14px; }
+.check .icon { font-size:14px; line-height:1.4; flex:none; }
+.check .body { flex:1; }
+.check .what { font-size:13.5px; font-weight:600; }
+.check .detail { font-size:12.5px; color:var(--ink-2); margin-top:2px; }
+.check .fix { font-size:12px; margin-top:5px; }
+.check.ok   { border-left:3px solid var(--good); }
+.check.warn { border-left:3px solid var(--warn); }
+.check.bad  { border-left:3px solid var(--bad); }
+.check.na   { border-left:3px solid var(--rule); }
+.check.ok .what   { color:var(--good-ink); }
+.check.warn .what { color:var(--warn-ink); }
+.check.bad .what  { color:var(--bad-ink); }
+.check.na .what   { color:var(--muted); }
+
+.tier { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600;
+  white-space:nowrap; margin-right:9px; font-variant-numeric:tabular-nums; }
+.tier i { width:9px; height:9px; border-radius:2px; display:inline-block; }
+.tier.micro { color:var(--t-micro-ink); } .tier.micro i { background:var(--t-micro); }
+.tier.small { color:var(--t-small-ink); } .tier.small i { background:var(--t-small); }
+.tier.mid   { color:var(--t-mid-ink); }   .tier.mid i   { background:var(--t-mid); }
+.tier.large { color:var(--t-large-ink); } .tier.large i { background:var(--t-large); }
+
+.rate { display:inline-flex; align-items:center; gap:6px; font-variant-numeric:tabular-nums;
+  font-weight:600; font-size:12.5px; }
+.rate.good { color:var(--good-ink); } .rate.poor { color:var(--bad-ink); }
+
+.runbook { display:grid; gap:10px; }
+.step { background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:12px 14px; }
+.step .title { font-size:13.5px; font-weight:650; }
+.step .desc { font-size:12.5px; color:var(--ink-2); margin:3px 0 8px; }
+.cmd { display:flex; gap:8px; align-items:center; margin-top:6px; }
+.cmd code { flex:1; background:var(--surface-2); border:1px solid var(--border);
+  border-radius:7px; padding:7px 10px; font-size:12px; overflow-x:auto; white-space:pre;
+  color:var(--ink); }
+button.copy { font:inherit; font-size:11.5px; font-weight:600; cursor:pointer; flex:none;
+  background:var(--surface-2); color:var(--ink-2); border:1px solid var(--border);
+  border-radius:7px; padding:6px 10px; }
+button.copy[data-done="1"] { color:var(--good-ink); border-color:var(--good); }
+.links { display:flex; flex-wrap:wrap; gap:10px; margin:6px 0 0; }
+.links a { font-size:13px; font-weight:600; text-decoration:none;
+  background:var(--surface); border:1px solid var(--border); border-radius:8px;
+  padding:7px 12px; }
+.links a:hover { border-color:var(--accent); }
+.note { font-size:12.5px; color:var(--ink-2); }
+</style>
+<div class="wrap">
+<header>
+  <div class="eyebrow">운영 콘솔</div>
+  <h1>yt-trend-radar 유지보수</h1>
+  <p class="sub">상황판 + 러너블 · 이 페이지는 읽기 전용 산출물이며 작업을 실행하지 않습니다 · 갱신 2026-08-03 10:35</p>
+</header>
+
+<div class="tiles"><div class="tile"><div class="label">카테고리</div><div class="value">6</div></div><div class="tile"><div class="label">시드 채널</div><div class="value">90</div></div><div class="tile"><div class="label">검증 통과</div><div class="value">86<small> / 90</small></div></div><div class="tile"><div class="label">스냅샷 행</div><div class="value">1,138</div></div><div class="tile"><div class="label">랭킹 행</div><div class="value">180</div></div></div>
+
+<section>
+  <h2>자동 점검</h2>
+  <div class="checks"><div class="check ok"><span class="icon">✅</span><div class="body"><div class="what">모든 카테고리에 시드 있음 (90개 채널)</div></div></div><div class="check ok"><span class="icon">✅</span><div class="body"><div class="what">RSS 검증 최신 (0일 전)</div><div class="detail">통과 86/90 · 96%</div></div></div><div class="check ok"><span class="icon">✅</span><div class="body"><div class="what">수집 정상 (마지막 0.0시간 전)</div></div></div><div class="check ok"><span class="icon">✅</span><div class="body"><div class="what">보관 정책 준수 (30일 초과 0행)</div></div></div></div>
+</section>
+
+<section>
+  <h2>카테고리 현황</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>카테고리</th><th style="text-align:right">시드</th>
+      <th>RSS 검증</th><th>규모 분포</th></tr></thead>
+    <tbody><tr><td><b>음식</b> <code style="color:var(--muted)">food</code></td><td class="num">15</td><td><span class="rate good">✅ 15/15 · 100%</span></td><td><span class="tier micro"><i></i>4</span><span class="tier small"><i></i>5</span><span class="tier mid"><i></i>4</span><span class="tier large"><i></i>2</span></td></tr><tr><td><b>여행</b> <code style="color:var(--muted)">travel</code></td><td class="num">15</td><td><span class="rate good">✅ 15/15 · 100%</span></td><td><span class="tier micro"><i></i>4</span><span class="tier small"><i></i>5</span><span class="tier mid"><i></i>5</span><span class="tier large"><i></i>1</span></td></tr><tr><td><b>IT·테크</b> <code style="color:var(--muted)">tech</code></td><td class="num">15</td><td><span class="rate good">✅ 13/15 · 87%</span></td><td><span class="tier micro"><i></i>4</span><span class="tier small"><i></i>5</span><span class="tier mid"><i></i>5</span><span class="tier large"><i></i>1</span></td></tr><tr><td><b>바이브코딩·AI</b> <code style="color:var(--muted)">aicoding</code></td><td class="num">15</td><td><span class="rate good">✅ 14/15 · 93%</span></td><td><span class="tier micro"><i></i>5</span><span class="tier small"><i></i>6</span><span class="tier mid"><i></i>4</span></td></tr><tr><td><b>브이로그·일상</b> <code style="color:var(--muted)">vlog</code></td><td class="num">15</td><td><span class="rate good">✅ 14/15 · 93%</span></td><td><span class="tier micro"><i></i>4</span><span class="tier small"><i></i>6</span><span class="tier mid"><i></i>4</span><span class="tier large"><i></i>1</span></td></tr><tr><td><b>운동·건강</b> <code style="color:var(--muted)">fitness</code></td><td class="num">15</td><td><span class="rate good">✅ 15/15 · 100%</span></td><td><span class="tier micro"><i></i>4</span><span class="tier small"><i></i>5</span><span class="tier mid"><i></i>4</span><span class="tier large"><i></i>2</span></td></tr></tbody>
+  </table></div>
+  <p class="note" style="margin-top:8px">규모 분포: 색 + 숫자 병기 ·
+    <span class="tier micro"><i></i>마이크로</span>
+    <span class="tier small"><i></i>소형</span>
+    <span class="tier mid"><i></i>중형</span>
+    <span class="tier large"><i></i>대형</span></p>
+</section>
+
+<section>
+  <h2>유지보수 런북</h2>
+  <p class="note">프로젝트 루트에서 <code>collector/.venv</code> 를 활성화한 뒤 실행합니다.
+    <code>PYTHONUTF8=1</code> 을 설정하세요 (한국어 Windows).</p>
+  <div class="runbook"><div class="step"><div class="title">1. 카테고리 추가</div><div class="desc"><code>config/categories.yaml</code> 에 항목을 추가한다 — 이름·키워드·exclude·<code>discovery_queries</code>(채널검색)·<code>discovery_queries_niche</code>(인기영상). 코드 수정은 필요 없다. 중복 키를 넣으면 테스트가 잡는다.</div><div class="cmd"><code>python -m pytest tests/test_config.py</code><button class="copy" type="button">복사</button></div></div><div class="step"><div class="title">2. 새 카테고리만 시드 발굴</div><div class="desc"><b><code>--only</code> 를 반드시 쓴다</b> — 전체 재발굴은 카테고리당 700u 씩 쿼터를 다시 태운다. 기존 카테고리는 파일 값을 그대로 유지한다.</div><div class="cmd"><code>python -m jobs.bootstrap_seeds --only &lt;category_id&gt;</code><button class="copy" type="button">복사</button></div></div><div class="step"><div class="title">3. DB 에 카테고리 반영</div><div class="desc">YAML 이 단일 진실이고 DB 테이블은 사본이다. 웹이 카테고리 이름을 읽으려면 동기화가 필요하다.</div><div class="cmd"><code>python -m jobs.sync_config</code><button class="copy" type="button">복사</button></div></div><div class="step"><div class="title">4. RSS 실검증 (쿼터 0)</div><div class="desc">채널 최신 15개 영상 제목으로 카테고리 적합도를 판정한다. <b>탈락은 삭제 대상이 아니라 검토 대상</b>이다 — 키워드가 부족해 놓친 경우가 섞인다.</div><div class="cmd"><code>python tools/verify_seeds.py --only &lt;category_id&gt;</code><button class="copy" type="button">복사</button></div><div class="cmd"><code>python tools/verify_seeds.py --write   # 검토 후 탈락분 제거</code><button class="copy" type="button">복사</button></div></div><div class="step"><div class="title">5. 검토·상황판 갱신</div><div class="desc">생성 후 아티팩트로 게시하면 링크가 유지된다.</div><div class="cmd"><code>python tools/gen_seeds_review.py</code><button class="copy" type="button">복사</button></div><div class="cmd"><code>python tools/gen_admin.py</code><button class="copy" type="button">복사</button></div><div class="cmd"><code>python tools/gen_progress.py</code><button class="copy" type="button">복사</button></div></div><div class="step"><div class="title">6. 보관 정책 집행</div><div class="desc">YouTube ToS — 수집 데이터는 30일 내 갱신 또는 삭제. 수집 cron 이 매번 함께 실행한다.</div><div class="cmd"><code>python -m jobs.purge --dry-run</code><button class="copy" type="button">복사</button></div><div class="cmd"><code>python -m jobs.purge</code><button class="copy" type="button">복사</button></div></div></div>
+</section>
+
+<section>
+  <h2>관련 페이지</h2>
+  <div class="links">
+    <a href="./seeds_review.html">🔍 시드 검토</a>
+    <a href="./progress.html">📡 진행 대시보드</a>
+  </div>
+  <p class="note" style="margin-top:8px">아티팩트로 게시된 링크는 별도입니다 — 위 링크는 로컬 파일 기준입니다.</p>
+</section>
+
+<footer>
+  생성: <code>tools/gen_admin.py</code> · 토큰: <code>tools/_theme.py</code> (근거는 <code>docs/DESIGN.md</code>) ·
+  점검 임계값: 검증 노후 7일 / 통과율 하한 60% /
+  무수집 12시간 / 쿼터 경고 80% ·
+  점검 상태는 색 + 아이콘 + 문구를 함께 씁니다.
+</footer>
+</div>
+<script>
+document.querySelectorAll('button.copy').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var code = b.parentElement.querySelector('code').textContent;
+    navigator.clipboard.writeText(code).then(function () {
+      var old = b.textContent;
+      b.textContent = '복사됨';
+      b.dataset.done = '1';
+      setTimeout(function () { b.textContent = old; b.dataset.done = '0'; }, 1600);
+    });
+  });
+});
+</script>

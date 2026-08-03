@@ -1,0 +1,62 @@
+{
+  "kind": "youtube#videoListResponse",
+  "etag": "harness-videos",
+  "items": [
+    {
+      "kind": "youtube#video",
+      "id": "vidHarness1",
+      "snippet": {
+        "publishedAt": "2026-07-28T09:00:00Z",
+        "channelId": "UCtest000000000000000001",
+        "title": "제주 흑돼지 맛집 3곳 털었습니다",
+        "description": "제주도 로컬 맛집 먹방",
+        "thumbnails": {
+          "medium": { "url": "https://i.ytimg.com/vi/vidHarness1/mqdefault.jpg", "width": 320, "height": 180 },
+          "high": { "url": "https://i.ytimg.com/vi/vidHarness1/hqdefault.jpg", "width": 480, "height": 360 }
+        },
+        "channelTitle": "하네스푸드",
+        "tags": ["먹방", "제주", "맛집"],
+        "categoryId": "24"
+      },
+      "contentDetails": { "duration": "PT12M34S", "definition": "hd" },
+      "statistics": { "viewCount": "152340", "likeCount": "8210", "commentCount": "412" }
+    },
+    {
+      "kind": "youtube#video",
+      "id": "vidHarness2",
+      "snippet": {
+        "publishedAt": "2026-07-29T02:30:00Z",
+        "channelId": "UCtest000000000000000001",
+        "title": "다낭 3박4일 총정리 #shorts",
+        "description": "베트남 다낭 해외여행 요약",
+        "thumbnails": {
+          "medium": { "url": "https://i.ytimg.com/vi/vidHarness2/mqdefault.jpg", "width": 320, "height": 180 }
+        },
+        "channelTitle": "하네스푸드",
+        "tags": ["여행", "다낭", "해외여행"],
+        "categoryId": "19"
+      },
+      "contentDetails": { "duration": "PT45S", "definition": "hd" },
+      "statistics": { "viewCount": "988100", "likeCount": "51200", "commentCount": "1904" }
+    },
+    {
+      "kind": "youtube#video",
+      "id": "vidHarness3",
+      "snippet": {
+        "publishedAt": "2026-07-20T11:00:00Z",
+        "channelId": "UCtest000000000000000002",
+        "title": "맥북 프로 M6 3주 사용 후기",
+        "description": "노트북 리뷰",
+        "thumbnails": {
+          "medium": { "url": "https://i.ytimg.com/vi/vidHarness3/mqdefault.jpg", "width": 320, "height": 180 }
+        },
+        "channelTitle": "하네스테크",
+        "tags": ["맥북", "리뷰", "노트북"],
+        "categoryId": "28"
+      },
+      "contentDetails": { "duration": "PT1H2M3S", "definition": "hd" },
+      "statistics": { "viewCount": "43120", "likeCount": "2210" }
+    }
+  ],
+  "pageInfo": { "totalResults": 3, "resultsPerPage": 3 }
+}

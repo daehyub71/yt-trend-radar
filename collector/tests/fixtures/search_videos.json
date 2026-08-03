@@ -1,0 +1,51 @@
+{
+  "kind": "youtube#searchListResponse",
+  "etag": "harness-search-videos",
+  "regionCode": "KR",
+  "pageInfo": { "totalResults": 4, "resultsPerPage": 4 },
+  "items": [
+    {
+      "kind": "youtube#searchResult",
+      "id": { "kind": "youtube#video", "videoId": "vidHarness2" },
+      "snippet": {
+        "publishedAt": "2026-07-29T02:30:00Z",
+        "channelId": "UCtest000000000000000002",
+        "title": "다낭 3박4일 총정리",
+        "description": "소형 채널의 최근 인기 영상",
+        "channelTitle": "하네스테크"
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "id": { "kind": "youtube#video", "videoId": "vidHarness1" },
+      "snippet": {
+        "publishedAt": "2026-07-28T09:00:00Z",
+        "channelId": "UCtest000000000000000001",
+        "title": "제주 흑돼지 맛집 3곳",
+        "description": "대형 채널의 최근 인기 영상",
+        "channelTitle": "하네스푸드"
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "id": { "kind": "youtube#video", "videoId": "vidHarness3" },
+      "snippet": {
+        "publishedAt": "2026-07-20T11:00:00Z",
+        "channelId": "UCtest000000000000000002",
+        "title": "맥북 프로 M6 후기",
+        "description": "같은 채널의 다른 영상 — 채널은 1회만 집계돼야 한다",
+        "channelTitle": "하네스테크"
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "id": { "kind": "youtube#channel", "channelId": "UCtest000000000000000009" },
+      "snippet": {
+        "channelId": "UCtest000000000000000009",
+        "title": "채널 결과 — 영상 검색에서는 걸러져야 한다",
+        "description": "",
+        "channelTitle": "영상없는채널"
+      }
+    }
+  ]
+}

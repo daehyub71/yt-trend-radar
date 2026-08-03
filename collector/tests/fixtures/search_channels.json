@@ -1,0 +1,47 @@
+{
+  "kind": "youtube#searchListResponse",
+  "etag": "harness-search",
+  "regionCode": "KR",
+  "pageInfo": { "totalResults": 3, "resultsPerPage": 3 },
+  "items": [
+    {
+      "kind": "youtube#searchResult",
+      "id": { "kind": "youtube#channel", "channelId": "UCtest000000000000000001" },
+      "snippet": {
+        "publishedAt": "2020-03-01T00:00:00Z",
+        "channelId": "UCtest000000000000000001",
+        "title": "하네스푸드",
+        "description": "먹방과 여행",
+        "channelTitle": "하네스푸드",
+        "thumbnails": {
+          "default": { "url": "https://yt3.ggpht.com/harness1=s88" }
+        }
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "id": { "kind": "youtube#channel", "channelId": "UCtest000000000000000002" },
+      "snippet": {
+        "publishedAt": "2023-11-15T00:00:00Z",
+        "channelId": "UCtest000000000000000002",
+        "title": "하네스테크",
+        "description": "가전과 노트북 리뷰",
+        "channelTitle": "하네스테크",
+        "thumbnails": {
+          "default": { "url": "https://yt3.ggpht.com/harness2=s88" }
+        }
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "id": { "kind": "youtube#video", "videoId": "vidHarness1" },
+      "snippet": {
+        "publishedAt": "2026-07-28T09:00:00Z",
+        "channelId": "UCtest000000000000000001",
+        "title": "제주 흑돼지 맛집 3곳 털었습니다",
+        "description": "영상 결과 — 채널 검색에서는 걸러져야 한다",
+        "channelTitle": "하네스푸드"
+      }
+    }
+  ]
+}

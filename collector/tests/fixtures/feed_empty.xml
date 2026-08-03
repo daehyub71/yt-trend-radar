@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015"
+      xmlns:media="http://search.yahoo.com/mrss/"
+      xmlns="http://www.w3.org/2005/Atom">
+  <link rel="self" href="http://www.youtube.com/feeds/videos.xml?channel_id=UCtest000000000000000009"/>
+  <!-- 항목이 없으므로 채널 id 는 링크에서 복원해야 한다 (루트 yt:channelId 는 UC 없음) -->
+  <id>yt:channel:test000000000000000009</id>
+  <yt:channelId>test000000000000000009</yt:channelId>
+  <title>영상없는채널</title>
+  <author>
+    <name>영상없는채널</name>
+    <uri>https://www.youtube.com/channel/UCtest000000000000000009</uri>
+  </author>
+  <published>2026-07-01T00:00:00+00:00</published>
+</feed>

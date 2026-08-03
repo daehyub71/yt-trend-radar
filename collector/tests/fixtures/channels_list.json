@@ -1,0 +1,50 @@
+{
+  "kind": "youtube#channelListResponse",
+  "etag": "harness-channels",
+  "items": [
+    {
+      "kind": "youtube#channel",
+      "id": "UCtest000000000000000001",
+      "snippet": {
+        "title": "하네스푸드",
+        "description": "먹방과 여행",
+        "customUrl": "@harnessfood",
+        "publishedAt": "2020-03-01T00:00:00Z",
+        "country": "KR",
+        "thumbnails": {
+          "default": { "url": "https://yt3.ggpht.com/harness1=s88", "width": 88, "height": 88 },
+          "medium": { "url": "https://yt3.ggpht.com/harness1=s240", "width": 240, "height": 240 }
+        }
+      },
+      "contentDetails": { "relatedPlaylists": { "uploads": "UUtest000000000000000001" } },
+      "statistics": {
+        "viewCount": "48200000",
+        "subscriberCount": "412000",
+        "videoCount": "630",
+        "hiddenSubscriberCount": false
+      }
+    },
+    {
+      "kind": "youtube#channel",
+      "id": "UCtest000000000000000002",
+      "snippet": {
+        "title": "하네스테크",
+        "description": "가전과 노트북 리뷰",
+        "customUrl": "@harnesstech",
+        "publishedAt": "2023-11-15T00:00:00Z",
+        "country": "KR",
+        "thumbnails": {
+          "default": { "url": "https://yt3.ggpht.com/harness2=s88", "width": 88, "height": 88 }
+        }
+      },
+      "contentDetails": { "relatedPlaylists": { "uploads": "UUtest000000000000000002" } },
+      "statistics": {
+        "viewCount": "1980000",
+        "subscriberCount": "23400",
+        "videoCount": "88",
+        "hiddenSubscriberCount": false
+      }
+    }
+  ],
+  "pageInfo": { "totalResults": 2, "resultsPerPage": 2 }
+}

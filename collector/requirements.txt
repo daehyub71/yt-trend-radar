@@ -1,0 +1,12 @@
+# yt-trend-radar collector — 순수 파이썬 의존성만 (네이티브 확장 회피)
+# DB 접근은 Supabase PostgREST HTTP API 를 requests 로 직접 호출한다.
+#
+# 버전 고정 이유: 재현 가능한 CI + 취약점 관리.
+# 2026-08-03 배포 전 보안 검토에서 pip-audit 취약점 3건을 발견해 전부 상향했다
+# (requests PYSEC-2026-2275 / python-dotenv PYSEC-2026-2270 / pytest PYSEC-2026-1845).
+requests==2.33.0
+PyYAML==6.0.2
+python-dotenv==1.2.2
+
+# 테스트
+pytest==9.0.3

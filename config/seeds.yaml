@@ -1,0 +1,304 @@
+# 시드 채널 (SPEC D4: 혼합 부트스트랩)
+#
+# ⚙️ jobs/bootstrap_seeds.py 생성 (2026-08-03 00:33 UTC) — 채널 90개, 10만 이하 57개
+#    channel_id 는 모두 YouTube API 응답에서 온 실제 값이다 (추측 없음).
+#    구간 쿼터: {'micro': 4, 'small': 5, 'mid': 4, 'large': 2}  (micro<1만, small<10만, mid<100만, large≥100만)
+#    손으로 추가/삭제해도 된다. 재실행하면 덮어쓰므로 수동 편집분은 백업할 것.
+
+version: 1
+
+seeds:
+  # food — 채널검색: 
+  #       인기영상: 
+  food:
+    - channel_id: UCxtLc0Jqq3SKBWlIXM_OC9g
+      handle: "@hongyuasmr"
+      note: "Hongyu ASMR 홍유 · 구독자 16,800,000 [large]"
+    - channel_id: UCoLQZ4ZClFqVPCvvjuiUSRA
+      handle: "@eatwithboki"
+      note: "문복희 Eat with Boki · 구독자 11,000,000 [large]"
+    - channel_id: UCXnv4nN5sz1CLAZeteyH90g
+      handle: "@자곰asmr"
+      note: "자곰 JAGOM ASMR · 구독자 823,000 [mid]"
+    - channel_id: UCtzeKLNCQK6-5WI5gKTOC7g
+      handle: "@유노-yuno"
+      note: "유노-Yuno · 구독자 778,000 [mid]"
+    - channel_id: UCehQiKylaW68H_OtRS36wGQ
+      handle: "@dulcinea_studio"
+      note: "둘시네아 dulcinea · 구독자 95,900 [small]"
+    - channel_id: UCDGLSi-amZJzBLFoaC0IznA
+      handle: "@자취요리bang"
+      note: "자취요리 뱅_쉽고 편한 자취 요리 · 구독자 91,200 [small]"
+    - channel_id: UCXP9gf8tDnLG5r-d0Licl-g
+      handle: "@duktem"
+      note: "득템 · 구독자 88,800 [small]"
+    - channel_id: UCmlNL48ZaUI7F-FdQdPxFTw
+      handle: "@rara.mukbang"
+      note: "라라먹방 Rara mukbang  · 구독자 88,200 [small]"
+    - channel_id: UCrNjpZ0mMxx-dXVp-d7a_mg
+      handle: "@choifcho"
+      note: "cho.eat! 초이프 레시피 · 구독자 9,890 [micro]"
+    - channel_id: UCqwMEIHCWkzRBBsh8-gCeKg
+      handle: "@jjang2469"
+      note: "먹방은짱이[ Jjang2 ] · 구독자 9,080 [micro]"
+    - channel_id: UC3CELODQnl5pGSWyS3OmMOA
+      handle: "@소개팁"
+      note: "소개팁 IntroTip · 구독자 662,000 [mid]"
+    - channel_id: UC7_5wc5eeOXpt_WDheHgSjw
+      handle: "@ddol-bi"
+      note: "똘비 ddolbi · 구독자 292,000 [mid]"
+    - channel_id: UCks9iecivoz63jutQHCcyuQ
+      handle: "@eaten_review"
+      note: "이튼 (eaten) - 음식리뷰 · 구독자 7,610 [micro]"
+    - channel_id: UCCz6JOPQyMxkVX-ia5Q715g
+      handle: "@chicory_zip"
+      note: "치커리집 · 구독자 7,360 [micro]"
+    - channel_id: UC38wHW6G9TxDI65j21fcWHQ
+      handle: "@user-huzziiyang82"
+      note: "[후찌양] Hujiyang · 구독자 54,000 [small]"
+
+  # travel — 채널검색: 
+  #         인기영상: 
+  travel:
+    - channel_id: UCfCOEG2kjX_x4KAdWX-YUcA
+      handle: "@nomadshaun"
+      note: "노마드션 No mad Shaun · 구독자 837,000 [mid]"
+    - channel_id: UCw5X6yzXwIcaSzJAQsL69Ug
+      handle: "@jojocamping"
+      note: "조조캠핑 JOJOCAMPING · 구독자 806,000 [mid]"
+    - channel_id: UCofBI5HeNEFAAp_6BuG35bw
+      handle: "@kongsoonytv"
+      note: "콩수니티비 (KONGSOONYTV) · 구독자 96,100 [small]"
+    - channel_id: UCYhJcg4BcEXd3hckQ1yQzbQ
+      handle: "@집시라라"
+      note: "라라의 집시 라이프  · 구독자 93,400 [small]"
+    - channel_id: UCax32GiDgtKq8MX2E71pAbQ
+      handle: "@ksuhwan"
+      note: "케이수환 · 구독자 87,400 [small]"
+    - channel_id: UCzViQlLMl0pcw0N4CaE9l0Q
+      handle: "@parkyongstravels"
+      note: "박용 ParkYong's Travels · 구독자 9,850 [micro]"
+    - channel_id: UCU9-fOZvYtWDMsDrX9W_oQw
+      handle: "@naeilhaeng"
+      note: "내일행 (내일도 여행 Travel) · 구독자 9,500 [micro]"
+    - channel_id: UCJIY7TDiaqYnec2-Is6OVdg
+      handle: "@travelgilson"
+      note: "여행나그네TV · 구독자 7,930 [micro]"
+    - channel_id: UCqgbCJS4ysQiJMhz27IaMeQ
+      handle: "@korea.festival"
+      note: "Korea Walking Trip 걸어서 한국 여행  · 구독자 7,590 [micro]"
+    - channel_id: UCvuwlY4fWkWMuzRkj5MAK9Q
+      handle: "@chomad"
+      note: "초마드 CHOMAD · 구독자 754,000 [mid]"
+    - channel_id: UCz_Ny4VP2kVss2DX7UfTukQ
+      handle: "@korea_travel"
+      note: "슬기로운 캠핑생활 · 구독자 736,000 [mid]"
+    - channel_id: UCuOscUJC9-vQPMpHd51WrlQ
+      handle: "@국내트레킹"
+      note: "국내트레킹 · 구독자 40,700 [small]"
+    - channel_id: UCMm1ZyRlaXYb5HGbKqqEfbQ
+      handle: "@여행가는동물가족"
+      note: "여행가는 동물가족 · 구독자 37,000 [small]"
+    - channel_id: UCSZQK43hJ422otti5D3iNgA
+      handle: "@ssoberrycamping"
+      note: "쏘베리 Ssoberry · 구독자 1,320,000 [large]"
+    - channel_id: UCWDpv948WJO7QgH5dtpGsqw
+      handle: "@trekking-korea"
+      note: "트레킹 코리아 · 구독자 265,000 [mid]"
+
+  # tech — 채널검색: 
+  #       인기영상: 
+  tech:
+    - channel_id: UCdUcjkyZtf-1WJyPPiETF1g
+      handle: "@itsub"
+      note: "ITSub잇섭 · 구독자 2,830,000 [large]"
+    - channel_id: UCFX6adXoyQKxft933NB3rmA
+      handle: "@techmong"
+      note: "테크몽 Techmong · 구독자 937,000 [mid]"
+    - channel_id: UCJiv3w22pf4Cgpwxo70MbhQ
+      handle: "@eyejoker7"
+      note: "눈쟁이 · 구독자 829,000 [mid]"
+    - channel_id: UCB11SAf7WSN4GrCquKoOHrw
+      handle: "@zuyoni1"
+      note: "주연 ZUYONI · 구독자 817,000 [mid]"
+    - channel_id: UC_0oo0GPlDUU88ubLDnJkSQ
+      handle: "@underkg"
+      note: "UNDERkg · 구독자 816,000 [mid]"
+    - channel_id: UCXqraYfnaiyg7fbATQFHlkw
+      handle: "@technosaurus_official"
+      note: "테크노사우루스 Technosaurus · 구독자 94,600 [small]"
+    - channel_id: UCNCvmV0bGnirolBG0snGmwQ
+      handle: "@리뷰추천"
+      note: "리뷰하는 펭귄 '리펭' · 구독자 56,400 [small]"
+    - channel_id: UCvFhJjq2S7onUjiVmM4c5Bw
+      handle: "@itkevin"
+      note: "KEVIN 케빈 - IT리뷰 · 구독자 52,500 [small]"
+    - channel_id: UCliIkQ09UZxHHGNN0asCLFA
+      handle: "@잇테크itech"
+      note: "잇테크ITech  · 구독자 9,270 [micro]"
+    - channel_id: UCCgtHYC2mqNBHad76q1INHw
+      handle: "@keykolon"
+      note: "코롱 · 구독자 9,050 [micro]"
+    - channel_id: UCCJSd96neakHpTgQgoLzC7g
+      handle: "@pebble_on"
+      note: "페블온 · 구독자 34,000 [small]"
+    - channel_id: UCgH3IRiphKNI00X9okIb9Uw
+      handle: "@keynori"
+      note: "키노리 · 구독자 22,300 [small]"
+    - channel_id: UCI0BFnNAFb6H9hj95jVEkmQ
+      handle: "@키보드왕"
+      note: "키보드왕 · 구독자 3,210 [micro]"
+    - channel_id: UCWIu0m9oluQfdr74f70UZKQ
+      handle: "@단축키키"
+      note: "단축키 · 구독자 1,440 [micro]"
+    - channel_id: UCSrGCYWE_VoHiLd6MBuEgPQ
+      handle: "@yozmtech"
+      note: "요즘테크 · 구독자 314,000 [mid]"
+
+  # aicoding — 채널검색: 
+  #           인기영상: 
+  aicoding:
+    - channel_id: UCQNE2JmbasNYbjGAcuBiRRg
+      handle: "@jocoding"
+      note: "조코딩 JoCoding · 구독자 745,000 [mid]"
+    - channel_id: UC7iAOLiALt2rtMVAWWl4pnw
+      handle: "@nadocoding"
+      note: "나도코딩 · 구독자 401,000 [mid]"
+    - channel_id: UC4vqrtRN8czAExGz-J0p2GQ
+      handle: "@smartdaddyai"
+      note: "스마트대디_SmartDaddy · 구독자 85,700 [small]"
+    - channel_id: UCBlTB7GyNQLqZMDRFEZ_cSg
+      handle: "@ai.yeongseon"
+      note: "신영선의 AI탐구 · 구독자 85,100 [small]"
+    - channel_id: UCidyOPC0asenYpq_Mgbfa0w
+      handle: "@honjobs"
+      note: "혼잡스 · 구독자 82,900 [small]"
+    - channel_id: UCxZ2AlaT0hOmxzZVbF_j_Sw
+      handle: "@codefactory_official"
+      note: "코드팩토리 · 구독자 75,500 [small]"
+    - channel_id: UCvjTW12xqQmPn_e8r_jkzjA
+      handle: "@aiteamjang"
+      note: "조팀장의 AI 공략집 · 구독자 71,400 [small]"
+    - channel_id: UC64nZb1bXGZfEXaFSvK15dw
+      handle: "@midnightlog-official"
+      note: "미드나잇 로그 Midnight Log · 구독자 9,430 [micro]"
+    - channel_id: UCeFa9LQlArxtflVi0N7gJ-g
+      handle: "@진바이브"
+      note: "바이브 코딩 공장 · 구독자 7,320 [micro]"
+    - channel_id: UCDNy6A4ytEpulIwpLTNFlpg
+      handle: "@lian.lab71"
+      note: "리안 | AI · 바이브 코딩 · 구독자 1,510 [micro]"
+    - channel_id: UCyMvBpSgFOL9K8-RNseOJMw
+      handle: "@클코형"
+      note: "비개발자를 위한 클로드 코드 전도사, 클코형 · 구독자 1,330 [micro]"
+    - channel_id: UC2tHUrXN5fVpooOQ0-SYDfw
+      handle: "@온선"
+      note: "온선 [온라인 선생님]  · 구독자 240,000 [mid]"
+    - channel_id: UC-SyuGFlZXpGdR7WszgYBhw
+      handle: "@success_wiki"
+      note: "성공지식백과 · 구독자 109,000 [mid]"
+    - channel_id: UCiiUQuKEqhZ1g15EglqnHHg
+      handle: "@배움의달인-p5v"
+      note: "배움의 달인 (AI·자동화) · 구독자 16,400 [small]"
+    - channel_id: UCPsgg6_D_4GLO18M5_TluGg
+      handle: "@sixshop_official"
+      note: "식스샵 | sixshop · 구독자 1,590 [micro]"
+
+  # vlog — 채널검색: 
+  #       인기영상: 
+  vlog:
+    - channel_id: UCtYHCl8yhhvpWfcvdA_sCVg
+      handle: "@jachinam"
+      note: "자취남 · 구독자 1,000,000 [large]"
+    - channel_id: UC3M7KcNy0NpE2D1rAwLYJOg
+      handle: "@시골생활-j3i"
+      note: "시골 생활 · 구독자 811,000 [mid]"
+    - channel_id: UCc8zY6tRCgHNpMdzpMZv5Vg
+      handle: "@jiae688"
+      note: "지애Jiae · 구독자 97,500 [small]"
+    - channel_id: UCfqwDHo6pTB2_xdvWX2mQcQ
+      handle: "@sysofia__"
+      note: "수아Sofia · 구독자 88,100 [small]"
+    - channel_id: UC9Ji0-yyImYeg8nllLyDjiQ
+      handle: "@misonugoolmina"
+      note: "misonugool미소너굴 · 구독자 86,500 [small]"
+    - channel_id: UCgz5Ljm2gxfWesbIQbgFwTA
+      handle: "@sinniphangwon"
+      note: "신입행원 · 구독자 9,010 [micro]"
+    - channel_id: UCAimNx17PoVgIyl8WTJ4Kew
+      handle: "@hassi_pyoryugi"
+      note: "하씨 · 구독자 114,000 [mid]"
+    - channel_id: UCEQzI6Bz2vVwAb4wJpTKN1Q
+      handle: "@vanillabean_vlog"
+      note: "바닐라콩 Vanillabean · 구독자 34,000 [small]"
+    - channel_id: UCBjVrewDNLSANajzpwAT11Q
+      handle: "@tuvvysroom"
+      note: "Tuvvy 터비 · 구독자 28,300 [small]"
+    - channel_id: UCapWefzddGFSI2MP63wXMrQ
+      handle: "@emilyjalee"
+      note: "Emily 세영 · 구독자 8,350 [micro]"
+    - channel_id: UCcPIOf1Fi_MO9VTZnpZUBfA
+      handle: "@8평부부"
+      note: "8평부부 · 구독자 4,200 [micro]"
+    - channel_id: UCGoIzPcybSKE5bT_YSyqK5Q
+      handle: "@김에너지요"
+      note: "김에너지 · 구독자 3,520 [micro]"
+    - channel_id: UCFB-bTRgw4GoK6cu0QUO_jw
+      handle: "@domintwo"
+      note: "도민이 · 구독자 297,000 [mid]"
+    - channel_id: UCX7JYcZIbRUxXaFMKDXLxtA
+      handle: "@gonayun"
+      note: "고나윤 Nayun Ko · 구독자 146,000 [mid]"
+    - channel_id: UC_c2192iCWc_fQytHcH4qXg
+      handle: "@roamingmono"
+      note: "로밍 모노 Roaming Mono · 구독자 19,000 [small]"
+
+  # fitness — 채널검색: 
+  #          인기영상: 
+  fitness:
+    - channel_id: UCQ2vUGzZrLpUBqsmsL_5EIQ
+      handle: "@mizilee"
+      note: "MIZI · 구독자 3,350,000 [large]"
+    - channel_id: UCpg89Ys3E4BaLGgEEWVmI9g
+      handle: "@thankyoububu"
+      note: "Thankyou BUBU · 구독자 3,190,000 [large]"
+    - channel_id: UCRGZCFuFCwp2D_YKByrqRfw
+      handle: "@afit_"
+      note: "에이핏 afit · 구독자 885,000 [mid]"
+    - channel_id: UCxWRe2A7LMTEwMBErR4DkgQ
+      handle: "@ppiyaksfit"
+      note: "삐약스핏 [살빼주는 병맛 다이어트채널] · 구독자 869,000 [mid]"
+    - channel_id: UCBFKb7wVUFOGIXsC5yDvUQw
+      handle: "@todays_ari"
+      note: "함께하는 다이어트, 강짐 · 구독자 95,700 [small]"
+    - channel_id: UClpfXyi9GsRoumkbljzNtLw
+      handle: "@하루운동"
+      note: "하루운동 김코치 · 구독자 85,800 [small]"
+    - channel_id: UCA3-y3vjFYumY3GWAVyuUQA
+      handle: "@ryeong_fit"
+      note: "령아홈트 · 구독자 85,200 [small]"
+    - channel_id: UC38BB0nvxIaEo5XJtGbta4A
+      handle: "@ssanta_tv"
+      note: "싼타TV · 구독자 82,100 [small]"
+    - channel_id: UCAH2LYKkx09Bhqgs3-p_uHg
+      handle: "@chosunghui66"
+      note: "조성휘 등산 · 구독자 9,990 [micro]"
+    - channel_id: UCnu2FcGbr7nRVdca8-dbmyg
+      handle: "@runnermini"
+      note: "달려라미니 · 구독자 6,420 [micro]"
+    - channel_id: UCUyEklnXll4GV0Sa0sIWX1g
+      handle: "@mountain_golem"
+      note: "마운틴 골렘 · 구독자 6,160 [micro]"
+    - channel_id: UCNTPdX5nBa7EZUEAWtV14BQ
+      handle: "@bright-health"
+      note: "밝은건강TV · 구독자 321,000 [mid]"
+    - channel_id: UCjzu9KEwdPnjB9uE2dJVseQ
+      handle: "@헬스걸스"
+      note: "헬스걸스 · 구독자 55,600 [small]"
+    - channel_id: UCBO2QRr16ZUHCSNS4YZqWsA
+      handle: "@be-an-athlete"
+      note: "비 언 에슬릿 - 강윤중 코치 · 구독자 6,030 [micro]"
+    - channel_id: UCx_2bXULZciQY76UoDhIntA
+      handle: "@maranic_tv"
+      note: "마라닉TV · 구독자 225,000 [mid]"
+

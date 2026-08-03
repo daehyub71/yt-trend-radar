@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015"
+      xmlns:media="http://search.yahoo.com/mrss/"
+      xmlns="http://www.w3.org/2005/Atom">
+  <link rel="self" href="http://www.youtube.com/feeds/videos.xml?channel_id=UCtest000000000000000001"/>
+  <!-- 실제 YouTube 피드와 동일: 루트의 yt:channelId 는 UC 접두어가 잘려 있다 -->
+  <id>yt:channel:test000000000000000001</id>
+  <yt:channelId>test000000000000000001</yt:channelId>
+  <title>하네스푸드</title>
+  <link rel="alternate" href="https://www.youtube.com/channel/UCtest000000000000000001"/>
+  <author>
+    <name>하네스푸드</name>
+    <uri>https://www.youtube.com/channel/UCtest000000000000000001</uri>
+  </author>
+  <published>2020-03-01T00:00:00+00:00</published>
+  <entry>
+    <id>yt:video:vidHarness2</id>
+    <yt:videoId>vidHarness2</yt:videoId>
+    <yt:channelId>UCtest000000000000000001</yt:channelId>
+    <title>다낭 3박4일 총정리 #shorts</title>
+    <link rel="alternate" href="https://www.youtube.com/watch?v=vidHarness2"/>
+    <author>
+      <name>하네스푸드</name>
+      <uri>https://www.youtube.com/channel/UCtest000000000000000001</uri>
+    </author>
+    <published>2026-07-29T02:30:00+00:00</published>
+    <updated>2026-07-29T06:12:00+00:00</updated>
+    <media:group>
+      <media:title>다낭 3박4일 총정리 #shorts</media:title>
+      <media:content url="https://www.youtube.com/v/vidHarness2?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+      <media:thumbnail url="https://i4.ytimg.com/vi/vidHarness2/hqdefault.jpg" width="480" height="360"/>
+      <media:description>베트남 다낭 해외여행 요약</media:description>
+      <media:community>
+        <media:starRating count="51200" average="4.95" min="1" max="5"/>
+        <media:statistics views="988100"/>
+      </media:community>
+    </media:group>
+  </entry>
+  <entry>
+    <id>yt:video:vidHarness1</id>
+    <yt:videoId>vidHarness1</yt:videoId>
+    <yt:channelId>UCtest000000000000000001</yt:channelId>
+    <title>제주 흑돼지 맛집 3곳 털었습니다</title>
+    <link rel="alternate" href="https://www.youtube.com/watch?v=vidHarness1"/>
+    <author>
+      <name>하네스푸드</name>
+      <uri>https://www.youtube.com/channel/UCtest000000000000000001</uri>
+    </author>
+    <published>2026-07-28T09:00:00+00:00</published>
+    <updated>2026-07-29T05:00:00+00:00</updated>
+    <media:group>
+      <media:title>제주 흑돼지 맛집 3곳 털었습니다</media:title>
+      <media:thumbnail url="https://i4.ytimg.com/vi/vidHarness1/hqdefault.jpg" width="480" height="360"/>
+      <media:description>제주도 로컬 맛집 먹방</media:description>
+      <media:community>
+        <media:starRating count="8210" average="4.90" min="1" max="5"/>
+        <media:statistics views="152340"/>
+      </media:community>
+    </media:group>
+  </entry>
+</feed>

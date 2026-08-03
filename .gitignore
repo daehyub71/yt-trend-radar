@@ -1,0 +1,35 @@
+# --- secrets: 절대 커밋 금지 ---
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# --- python ---
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- node / next ---
+node_modules/
+.next/
+out/
+.vercel/
+.node/
+
+# --- 로컬 산출물 ---
+*.log
+.DS_Store
+Thumbs.db
+collector/.local/
+
+# --- YouTube 파생 데이터가 담긴 산출물: 커밋 금지 ---
+# 영상 제목이 들어 있다. git 이력은 지워도 남으므로, 30일 보관 정책(YouTube ToS)을
+# 지키려는 jobs/purge 와 어긋난다. CI 에서는 Actions 아티팩트로 올린다(자동 만료).
+# 로컬에서는 그대로 생성·열람하면 된다.
+docs/seeds_review.html
+docs/seeds_verdicts.json
+config/seeds.*.bak.yaml
