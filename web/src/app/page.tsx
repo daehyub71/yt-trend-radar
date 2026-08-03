@@ -20,12 +20,28 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
     categories = await fetchCategories();
   } catch (e) {
     // DB 장애로 페이지가 통째로 죽지 않게 한다 (SPEC NFR-9 와 같은 취지).
+    // 원인을 못 좁히는 오류 화면은 없느니만 못하므로, **키 값이 아닌 사유**를 함께 보여준다.
+    const detail =
+      e instanceof DbUnavailableError
+        ? e.reason === 'missing-config'
+          ? '서버에 데이터베이스 접속 설정이 없습니다.'
+          : e.reason === 'network'
+            ? '데이터베이스에 연결하지 못했습니다.'
+            : `데이터베이스가 ${e.status} 응답을 보냈습니다.`
+        : null;
     return (
       <>
         <Head />
         <p className="empty">
           지금은 데이터를 불러올 수 없습니다. 잠시 후 다시 시도해 주세요.
-          {e instanceof DbUnavailableError ? '' : ''}
+          {detail ? (
+            <>
+              <br />
+              <span style={{ color: 'var(--muted)', fontSize: 12.5 }}>
+                {detail} 진단: <code>/api/health</code>
+              </span>
+            </>
+          ) : null}
         </p>
         <SiteFooter lastCollectedAt={null} />
       </>

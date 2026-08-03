@@ -23,19 +23,45 @@ const ANON_KEY = process.env.SUPABASE_ANON_KEY ?? '';
 /** 수집이 하루 3회이므로 8시간마다 재생성하면 충분하다. 조금 짧게 잡아 지연을 흡수한다. */
 export const REVALIDATE_SECONDS = 60 * 60 * 2;
 
-export class DbUnavailableError extends Error {}
+export class DbUnavailableError extends Error {
+  /** 화면·헬스체크에 노출해도 안전한 사유 코드 (키 값은 절대 담지 않는다). */
+  constructor(
+    message: string,
+    readonly reason: 'missing-config' | 'http-error' | 'network',
+    readonly status?: number,
+  ) {
+    super(message);
+  }
+}
+
+/** 설정 존재 여부만 반환한다 — 값은 반환하지 않는다. */
+export function configStatus() {
+  return { hasUrl: Boolean(URL_BASE), hasAnonKey: Boolean(ANON_KEY) };
+}
 
 async function get<T>(path: string): Promise<T[]> {
   if (!URL_BASE || !ANON_KEY) {
-    throw new DbUnavailableError('SUPABASE_URL / SUPABASE_ANON_KEY 가 설정되지 않았습니다');
+    const missing = [!URL_BASE && 'SUPABASE_URL', !ANON_KEY && 'SUPABASE_ANON_KEY']
+      .filter(Boolean)
+      .join(', ');
+    throw new DbUnavailableError(`환경변수 미설정: ${missing}`, 'missing-config');
   }
-  const res = await fetch(`${URL_BASE}/rest/v1/${path}`, {
-    headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}` },
-    next: { revalidate: REVALIDATE_SECONDS },
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${URL_BASE}/rest/v1/${path}`, {
+      headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}` },
+      next: { revalidate: REVALIDATE_SECONDS },
+    });
+  } catch {
+    throw new DbUnavailableError('DB 서버에 연결하지 못했습니다', 'network');
+  }
   if (!res.ok) {
     // 응답 본문에 키가 실릴 수 있으므로 상태 코드만 노출한다.
-    throw new DbUnavailableError(`PostgREST ${res.status} (${path.split('?')[0]})`);
+    throw new DbUnavailableError(
+      `PostgREST ${res.status} (${path.split('?')[0]})`,
+      'http-error',
+      res.status,
+    );
   }
   return (await res.json()) as T[];
 }
